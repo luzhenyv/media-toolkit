@@ -1,0 +1,18 @@
+#!/bin/sh
+# render：由源文件重新导出成品，成品和源文件同名，放在同一目录。
+#   F03-转移表.drawio  ->  F03-转移表.png
+# 用法：render 源文件...
+set -e
+[ $# -gt 0 ] || { echo "用法: render 源文件..." >&2; exit 1; }
+
+drawio() {
+  if command -v drawio >/dev/null 2>&1; then command drawio "$@"
+  else /Applications/draw.io.app/Contents/MacOS/draw.io "$@"; fi
+}
+
+for src in "$@"; do
+  case "$src" in
+    *.drawio) drawio -x -f png -s 2 -o "${src%.drawio}.png" "$src" ;;
+    *) echo "render: 暂不支持 $src" >&2; exit 1 ;;
+  esac
+done
