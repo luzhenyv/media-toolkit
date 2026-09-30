@@ -17,8 +17,8 @@ description: The single source of rules for content projects - project template,
 └── <unit>/           # one episode, article, or short video
     ├── article.md    # written article (human-owned)
     ├── voiceover.md  # voiceover script (optional)
-    ├── voiceover.srt # subtitles exported from CapCut (optional)
-    ├── edit.md       # video edit plan (optional)
+    ├── voiceover.srt # subtitles (SRT format, from the user's video editor or transcription; optional)
+    ├── video-edit.md # video edit plan (optional)
     ├── style.md      # unit-level style override (optional)
     ├── assets/       # this unit's assets
     └── raw/          # recordings, screen captures, photos (read-only; large files not in git)
@@ -41,7 +41,7 @@ description: The single source of rules for content projects - project template,
 
 ## Visual markers
 
-The plan for each visual lives where it is used: in `article.md`, or in `edit.md` for video-only visuals.
+The plan for each visual lives where it is used: in `article.md`, or in `video-edit.md` for video-only visuals.
 
 ```markdown
 > [F03 · diagram · draft] One-sentence description of what the viewer sees.
@@ -63,13 +63,14 @@ The plan for each visual lives where it is used: in `article.md`, or in `edit.md
 | 3 | "make F03 F04" | assets + embeds (production skills) |
 | 4 | commit `<unit>: article final` | checkpoint |
 | 5 | "voiceover script" | `voiceover.md` (`voiceover-script`) |
-| 6 | records in CapCut, video into `raw/` | |
-| 7 | exports subtitles to `voiceover.srt` | |
-| 8 | "edit plan" | `edit.md`; missing visuals get new IDs (`edit-plan`) |
-| 9 | edits in CapCut | |
+| 6 | records voiceover (any tool), saves video to `raw/` | |
+| 7 | exports or transcribes subtitles to `voiceover.srt` | |
+| 8 | "edit plan" | `video-edit.md`; missing visuals get new IDs (`video-edit-plan`) |
+| 9 | edits the final video (any tool) | |
 
 - Any stage can be revisited: "make F18" after editing is normal.
 - State comes only from files and git: markers, which files exist, commit messages. Keep no other state.
+- **The toolkit prepares materials. Final editing is done by the user** in their own tools (video editor, Markdown editor, etc.). Agent-written content is always reviewed and adjusted by a human before use.
 - "What's next for EP01?" → check files and markers and answer from the table.
 
 ## Style

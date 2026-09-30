@@ -20,4 +20,4 @@ Input: the unit's article (usually after a commit marked `final`). Output: `voic
 
 1. Write `voiceover.md`. Put an estimated duration at the top (the speaking rate from `style.md`, else 240 Chinese characters or 150 English words per minute).
 2. If `style.md` asks for extra versions (e.g. a short social-media version) or a change list, produce them as it says.
-3. On request, a teleprompter version: the same text with markers removed, printed in the reply for pasting into CapCut's teleprompter. Do not save it as a file.
+3. On request, a teleprompter version: the same text with markers removed, printed in the reply for pasting into the user's teleprompter tool. Do not save it as a file.

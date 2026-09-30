@@ -45,6 +45,6 @@ assets/
 
 ## Prompt rules
 
-- No text in the image: AI renders CJK text badly. Add text later in draw.io or CapCut.
+- No text in the image: AI renders CJK text badly. Add text later in draw.io or a video editor.
 - State the aspect ratio: video 16:9, Xiaohongshu 3:4 (or as `style.md` says).
 - Describe what is visible, not the abstract idea ("a note slid under a door", not "the Chinese Room argument").

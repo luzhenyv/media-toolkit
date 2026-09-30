@@ -9,6 +9,7 @@ This project follows the media-toolkit SOP (skill `media-sop`). Style: `style.md
 |---|---|
 | article.md | draft.md |
 | voiceover.md | script.md |
+| video-edit.md | cut.md |
 -->
 
 ## Project rules

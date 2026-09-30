@@ -2,6 +2,8 @@
 
 A Claude Code plugin for content projects: one SOP, a small set of tools, and skills for the article → voiceover → video workflow. Every asset has a **hand-editable source**; fix details yourself and re-render, without going back to the agent.
 
+The toolkit prepares; you finish. Final text and final video are always edited by a human, in whatever tools you prefer.
+
 ## Workflow
 
 In a content project, open `claude` and say what you want:
@@ -10,12 +12,12 @@ In a content project, open `claude` and say what you want:
 |---|---|
 | (edit the article yourself) | |
 | "plan visuals" | visual markers in the article |
-| "make F03 F04" | assets + image embeds; review them in Typora |
+| "make F03 F04" | assets + image embeds; review in your Markdown editor |
 | commit `EP01: article final` | checkpoint |
 | "voiceover script" | `voiceover.md` |
-| record in CapCut, export subtitles to `voiceover.srt` | |
-| "edit plan" | `edit.md`: timecode × visual; missing visuals get planned |
-| edit in CapCut | |
+| record voiceover, export/transcribe subtitles to `voiceover.srt` | |
+| "edit plan" | `video-edit.md`: timecode × visual; missing visuals get planned |
+| edit the final video (your own tool) | |
 
 Rules (project layout, file names, markers) live in one place: `skills/media-sop`.
 
@@ -23,7 +25,7 @@ Rules (project layout, file names, markers) live in one place: `skills/media-sop
 
 | Path | What |
 |---|---|
-| `skills/` | `media-sop` rules · `plan-visuals` · `drawio-diagram` · `remotion-animation` · `image-search` · `ai-image` · `voiceover-script` · `edit-plan` |
+| `skills/` | `media-sop` rules · `plan-visuals` · `drawio-diagram` · `remotion-animation` · `image-search` · `ai-image` · `voiceover-script` · `video-edit-plan` |
 | `bin/` | `render` source → output · `preview` live animation preview · `commons` Wikimedia Commons search/download |
 | `runtimes/remotion/` | shared Remotion runtime; `node_modules` installs here (not in git) |
 | `templates/project/` | `CLAUDE.md`, `style.md`, `.gitignore` for a new project |
