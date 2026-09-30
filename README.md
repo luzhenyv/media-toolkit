@@ -1,31 +1,32 @@
 # media-toolkit
 
-给自媒体内容做素材的小工具箱。Agent（Claude Code / Codex）查 Skill、调用工具，产出**可以手改的源文件**和成品。改细节时直接改源文件，再 `render` 一次，不用回头找 AI。
+Claude Code plugin：设计配图，制作**可以手改源文件**的素材。改细节时直接改源文件，再 `render` 一次，不用回头找 AI。
 
-- `bin/`：小工具，每个只做一件事，也能自己在终端里用。
-- `skills/`：做法，一个效果一个目录（`SKILL.md`）。
+| 目录 | 内容 |
+|---|---|
+| `skills/` | `plan-visuals` 设计配图清单；`asset-layout` 文件结构规矩；`drawio-diagram` 示意图 |
+| `bin/` | `render`：源文件 → 成品 |
 
-原则：够用就行。新工具、新 Skill 等真的用到了再加。
+## 使用
 
-## 安装
+整台电脑只有这一份代码，不安装、不复制，用 `--plugin-dir` 直接加载。在 `~/.zshrc` 里加：
 
 ```sh
-# 把 render 加进 PATH（写进 ~/.zshrc）
-export PATH="$HOME/Steven/project/media-toolkit/bin:$PATH"
-
-# 让 Claude Code / Codex 都能找到 skills
-mkdir -p ~/.claude/skills ~/.codex/skills
-for s in ~/Steven/project/media-toolkit/skills/*/; do
-  ln -sfn "$s" ~/.claude/skills/; ln -sfn "$s" ~/.codex/skills/
-done
+alias claude='claude --plugin-dir ~/Steven/project/media-toolkit'
+export PATH="$HOME/Steven/project/media-toolkit/bin:$PATH"   # 手动 render 用
 ```
+
+然后在内容仓库里启动 `claude`，例如："给 EP01 设计配图"、"做 F03"。
+
+- 改 `bin/` 脚本：立即生效。
+- 改 `SKILL.md`：新开一个会话生效。
 
 需要 draw.io 桌面版（`/Applications/draw.io.app`）。
 
-## 用法
+## 手动重新导出
 
 ```sh
-render figures/F03-转移表.drawio   # 生成 figures/F03-转移表.png
+render assets/F03-转移表.drawio   # 生成 assets/F03-转移表.png
 ```
 
 | 源文件 | 成品 | Skill |
