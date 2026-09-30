@@ -1,7 +1,7 @@
 #!/bin/sh
 # render: re-export outputs from sources. Output shares the source name, in the same directory.
 #   F03-table.drawio -> F03-table.png
-#   F04-ball.tsx     -> F04-ball.mp4 + F04-ball.png (cover)
+#   F04-ball.tsx     -> F04-ball.mp4 (video) + F04-ball.gif (articles) + F04-ball.png (cover)
 # Usage: render [source...]
 #   No arguments: re-export every source in ./assets (or .) whose output is missing or older.
 set -e
@@ -34,6 +34,8 @@ for src in "$@"; do
     *.tsx)
       abs="$(cd "$(dirname "$src")" && pwd)/$(basename "$src")"
       remotion render "$abs" main "${abs%.tsx}.mp4"
+      # GIF for platforms that cannot play video: half size, half frame rate (~1 MB per 10 s)
+      remotion render "$abs" main "${abs%.tsx}.gif" --codec=gif --scale=0.5 --every-nth-frame=2
       remotion still "$abs" cover "${abs%.tsx}.png" ;;
     *) echo "render: unsupported file $src" >&2; exit 1 ;;
   esac

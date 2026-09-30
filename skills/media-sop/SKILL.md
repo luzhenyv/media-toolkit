@@ -50,7 +50,7 @@ The plan for each visual lives where it is used: in `article.md`, or in `video-e
 
 - Marker line: `> [ID · type · status] description`. Type: `diagram` `animation` `photo` `illustration` `screen` `other`. Status: `todo` → `draft` → `final`, or `dropped`.
 - A user may write a bare `> [F18] description`; fill in type and status when planning.
-- Embed line directly below, added once the asset exists. Video: `[![F04](assets/F04-x.png)](assets/F04-x.mp4)`.
+- Embed line directly below, added once the asset exists. Animation: `[![F04](assets/F04-x.gif)](assets/F04-x.mp4)` (GIF plays in articles; click opens the MP4).
 - **Agents may only insert or edit marker lines and embed lines. Never change prose.**
 - Progress overview: scan the markers; there is no separate list file.
 

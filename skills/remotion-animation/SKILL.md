@@ -1,6 +1,6 @@
 ---
 name: remotion-animation
-description: Make short animations and video clips with Remotion (React), producing a hand-editable .tsx source, an MP4, and a cover PNG. Use for markers of type animation, or when the user wants something turned into video.
+description: Make short animations and video clips with Remotion (React), producing a hand-editable .tsx source, an MP4 for video, a GIF for articles, and a cover PNG. Use for markers of type animation, or when the user wants something turned into video or an animated image.
 ---
 
 # Remotion animation
@@ -23,8 +23,16 @@ export const config = { fps: 30, width: 1920, height: 1080, durationInFrames: T.
 export default function Fxx() { const f = useCurrentFrame(); /* ... */ }
 ```
 
-- `config.cover`: the frame frozen into the same-name PNG (default: last frame). The PNG also serves the article.
+- `config.cover`: the frame frozen into the same-name PNG (default: last frame), for thumbnails and platforms that allow only static images.
 - Only import `remotion` and `react`.
+
+## Outputs
+
+| File | For |
+|---|---|
+| `.mp4` | video (full size, full frame rate) |
+| `.gif` | articles and blogs that cannot play video (half size, half frame rate, about 1 MB per 10 s) |
+| `.png` | cover / static fallback |
 
 ## Writing rules
 
@@ -33,7 +41,7 @@ Goal: the user adjusts the parameters block without reading the component or ask
 - Every text, number, color, and time point is in the parameters block with a one-line comment.
 - One timeline object `T` (in frames) that all segments reference.
 - Draw in a single 1920×1080 `<svg viewBox>`: plain coordinates are easy to hand-tune.
-- Fonts from `style.md`; fallback `"PingFang SC", "Noto Sans CJK SC", sans-serif`. Body text at least 28 px.
+- Fonts from `style.md`; fallback `"PingFang SC", "Noto Sans CJK SC", sans-serif`. Body text at least 28 px (it is halved in the GIF).
 - Randomness uses a fixed seed so every render is identical.
 - Short: one idea per clip, 10–20 seconds.
 
@@ -41,7 +49,7 @@ Goal: the user adjusts the parameters block without reading the component or ask
 
 1. Read the marker and surrounding text; check numbers and terms against the article.
 2. Write `assets/F##-<name>.tsx`.
-3. Render: `"${CLAUDE_PLUGIN_ROOT}/bin/render" assets/F##-<name>.tsx` → same-name `.mp4` + `.png`. First run installs dependencies.
-4. Check: extract frames at key moments (`ffmpeg -ss <sec> -i x.mp4 -frames:v 1 y.png`) and Read them: overlaps, hidden text, wrong numbers. Fix and re-render.
-5. Set the marker to `draft` and add the embed line: `[![F##](assets/F##-<name>.png)](assets/F##-<name>.mp4)`.
+3. Render: `"${CLAUDE_PLUGIN_ROOT}/bin/render" assets/F##-<name>.tsx` → same-name `.mp4`, `.gif`, `.png`. First run installs dependencies.
+4. Check: extract frames at key moments (`ffmpeg -ss <sec> -i x.mp4 -frames:v 1 y.png`) and Read them: overlaps, hidden text, wrong numbers. Also check one GIF frame for small text. Fix and re-render.
+5. Set the marker to `draft` and add the embed line (the GIF plays in articles; clicking opens the MP4): `[![F##](assets/F##-<name>.gif)](assets/F##-<name>.mp4)`.
 6. Tell the user which parameters they will most likely tweak, and that `preview <file>.tsx` shows live changes.

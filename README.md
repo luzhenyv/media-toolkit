@@ -50,7 +50,7 @@ New project: "set up this project with media-toolkit" (copies `templates/project
 
 ```sh
 render                                 # re-export every stale asset in ./assets
-render assets/F04-ball.tsx             # one asset → .mp4 + .png cover
+render assets/F04-ball.tsx             # one asset → .mp4 + .gif + .png cover
 preview assets/F04-ball.tsx            # live preview in the browser
 commons search "Andrei Markov" 5
 commons get "File:Andrei Markov.jpg" assets/F02-onegin.portrait.jpg
@@ -59,6 +59,6 @@ commons get "File:Andrei Markov.jpg" assets/F02-onegin.portrait.jpg
 | Source | Output | Edit by hand | Skill |
 |---|---|---|---|
 | `.drawio` | `.png` | open in draw.io | `drawio-diagram` |
-| `.tsx` | `.mp4` + `.png` | the parameters block at the top | `remotion-animation` |
+| `.tsx` | `.mp4` + `.gif` + `.png` | the parameters block at the top | `remotion-animation` |
 | `.md` (source, license) | downloaded `.jpg` / `.png` | never edit originals; composite elsewhere | `image-search` |
 | `.md` (prompt) | `.v1.png` … → `.png` | edit the prompt, regenerate yourself | `ai-image` |
