@@ -77,3 +77,5 @@ The plan for each visual lives where it is used: in `article.md`, or in `video-e
 ## Style
 
 Before producing anything, read `style.md`: unit-level first, then project-level. The unit file overrides the project file. If neither exists, use each skill's defaults.
+
+Style presets live in `${CLAUDE_PLUGIN_ROOT}/styles/` (`preview.html` shows them side by side). A project's `style.md` may copy one, mix several, or name one ("Visual: punch-card"). Voice is always project-specific.

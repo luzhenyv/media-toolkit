@@ -29,6 +29,8 @@ Rules (project layout, file names, markers) live in one place: `skills/media-sop
 | `bin/` | `render` source → output · `preview` live animation preview · `commons` Wikimedia Commons search/download |
 | `runtimes/remotion/` | shared Remotion runtime; `node_modules` installs here (not in git) |
 | `templates/project/` | `CLAUDE.md`, `style.md`, `.gitignore` for a new project |
+| `styles/` | visual style presets (`punch-card`, `blueprint`, `ink-and-seal`, `signal-and-noise`, `warm-flat`); open `preview.html` to compare |
+| `docs/profile.md` | the owner's personal brand profile |
 
 ## Setup
 
