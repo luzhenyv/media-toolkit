@@ -1,16 +1,28 @@
 #!/bin/sh
 # render：由源文件重新导出成品，成品和源文件同名，放在同一目录。
 #   F03-转移表.drawio  ->  F03-转移表.png
+#   F04-小球.tsx       ->  F04-小球.mp4 + F04-小球.png（封面）
 # 用法：render 源文件...
 set -e
 [ $# -gt 0 ] || { echo "用法: render 源文件..." >&2; exit 1; }
 
 DRAWIO=/Applications/draw.io.app/Contents/MacOS/draw.io
 [ -x "$DRAWIO" ] || DRAWIO=drawio   # 非 macOS：用 PATH 里的 drawio
+RT="$(cd "$(dirname "$0")/../runtimes/remotion" && pwd)"
+
+remotion() {   # remotion 命令 素材绝对路径 其余参数...
+  cmd=$1; asset=$2; shift 2
+  (cd "$RT" && { [ -d node_modules ] || npm install --no-audit --no-fund; } \
+    && ASSET="$asset" npx remotion "$cmd" index.tsx "$@")
+}
 
 for src in "$@"; do
   case "$src" in
     *.drawio) "$DRAWIO" -x -f png -s 2 -o "${src%.drawio}.png" "$src" ;;
+    *.tsx)
+      abs="$(cd "$(dirname "$src")" && pwd)/$(basename "$src")"
+      remotion render "$abs" main "${abs%.tsx}.mp4"
+      remotion still "$abs" cover "${abs%.tsx}.png" ;;
     *) echo "render: 暂不支持 $src" >&2; exit 1 ;;
   esac
 done
