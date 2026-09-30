@@ -1,27 +1,28 @@
 ---
 name: drawio-diagram
-description: 用 draw.io 画静态示意图（表格、状态图、流程图、关系图），产出可手改的 .drawio 源文件和 PNG。配图清单里形式为"示意图""表格"时使用。
+description: Draw static diagrams (tables, state diagrams, flowcharts, relationship maps) in draw.io, producing a hand-editable .drawio source and a PNG. Use for markers of type diagram.
 ---
 
-# draw.io 示意图
+# draw.io diagram
 
-文件放在哪、怎么命名、清单怎么更新，按 `asset-layout` Skill。
+File names and markers follow `media-sop`. Colors and fonts come from `style.md`.
 
-## 写 .drawio 的要求
+## Writing the .drawio file
 
-目标：用户以后打开 draw.io 就能自己改，不用再找 AI。
+Goal: the user can open it in draw.io and fix details without asking the agent again.
 
-- 用未压缩的 XML，方便 git 对比。
-- 画布 16:9（1600×900）。draw.io 导出时会裁到内容边界，所以第一个元素放一个锁定的白色画框：
+- Uncompressed XML, so git diffs are readable.
+- Canvas 16:9 (1600×900). draw.io crops exports to content, so make the first element a locked white frame:
   `<mxCell id="frame" value="" style="fillColor=#FFFFFF;strokeColor=none;locked=1;" vertex="1" parent="1"><mxGeometry width="1600" height="900" as="geometry"/></mxCell>`
-- 每段文字、每个数字各占一个元素，双击就能改；不要把多段内容塞进一个 HTML 标签。
-- 颜色最多 2–3 种，同类元素用同一个 style，方便用户全选后统一改色。
-- 字号：正文不小于 28，视频里也要看得清。
+- One element per text or number, so each is editable by double-click. No multi-part HTML labels.
+- At most 2–3 colors; same style for same-kind elements, so select-all recoloring works.
+- Body text at least 28 px, readable in video.
 
-## 步骤
+## Steps
 
-1. 读稿子里对应的配图说明，确认数字和术语与正文一致。
-2. 写 `assets/F##-短名.drawio`。
-3. 导出：`"${CLAUDE_PLUGIN_ROOT}/bin/render" assets/F##-短名.drawio`
-4. 用 Read 查看导出的 PNG：文字是否重叠、数字是否正确。有问题改源文件，重新导出。
-5. 交付时用一两句话告诉用户：常改的东西在哪里、改完怎么重新导出。
+1. Read the marker and surrounding text; check numbers and terms against the article.
+2. Write `assets/F##-<name>.drawio`.
+3. Export: `"${CLAUDE_PLUGIN_ROOT}/bin/render" assets/F##-<name>.drawio`
+4. Read the PNG: overlaps, cut-off text, wrong numbers. Fix the source and re-render.
+5. Set the marker to `draft` and add the embed line below it.
+6. Tell the user in one or two sentences what they are most likely to tweak and that `render` re-exports.

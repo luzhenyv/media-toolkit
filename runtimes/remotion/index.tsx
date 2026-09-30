@@ -1,7 +1,7 @@
-// 注册两个 composition：main（视频）和 cover（封面，定格在 config.cover 那一帧）。
+// Registers two compositions: main (video) and cover (a still frozen at config.cover).
 import React from "react";
 import { Composition, Freeze, Still, registerRoot } from "remotion";
-// @ts-ignore  由 remotion.config.ts 的 alias 指向素材文件
+// @ts-ignore  alias set in remotion.config.ts, points at the asset file
 import Asset, { config } from "@asset";
 
 const c = { fps: 30, width: 1920, height: 1080, durationInFrames: 300, ...config };

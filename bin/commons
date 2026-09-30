@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""commons：在 Wikimedia Commons 搜图、下载，并写下来源和授权。
+"""commons: search and download images from Wikimedia Commons, recording source and license.
 
-  commons search 关键词 [数量]          列出候选：标题、尺寸、授权、作者
-  commons get "File:标题" 目标.jpg      下载（长边最多 2400px），同时写 目标.md（来源、作者、授权）
+  commons search <query> [count]          list candidates: title, size, license, author
+  commons get "File:<title>" <dest.jpg>   download (long side up to 2400 px) and write <dest>.md
 """
 import datetime, html, json, re, sys, urllib.parse, urllib.request
 from pathlib import Path
 
 API = "https://commons.wikimedia.org/w/api.php"
-UA = "media-toolkit/0.1 (personal content tool)"  # Wikimedia 要求带 User-Agent
+UA = "media-toolkit/0.1 (personal content tool)"  # Wikimedia requires a User-Agent
 
 
 def call(**params):
@@ -17,7 +17,7 @@ def call(**params):
         return json.load(r)
 
 
-def clean(s):  # extmetadata 里是 HTML：去标签、去隐藏的重复文字
+def clean(s):  # extmetadata values are HTML: strip tags and hidden duplicate text
     s = re.sub(r'<span style="display: none;">.*?</span>', "", str(s or ""))
     return html.unescape(re.sub(r"<[^>]+>", "", s)).strip()
 
@@ -33,40 +33,41 @@ def search(q, n=10):
              prop="imageinfo", iiprop="url|extmetadata|size")
     pages = sorted(d.get("query", {}).get("pages", {}).values(), key=lambda p: p["index"])
     if not pages:
-        print("没有结果，换个关键词（英文、原文名通常更好）"); return
+        print("No results. Try English or the original-language name."); return
     for k, p in enumerate(pages, 1):
         i, m = info(p)
-        print(f"{k:2}. {p['title']}  {i['width']}×{i['height']}  [{m.get('LicenseShortName', '?')}]")
-        print(f"    作者：{m.get('Artist', '?')[:60]}   {i['descriptionurl']}")
+        print(f"{k:2}. {p['title']}  {i['width']}x{i['height']}  [{m.get('LicenseShortName', '?')}]")
+        print(f"    author: {m.get('Artist', '?')[:60]}   {i['descriptionurl']}")
 
 
 def get(title, dest):
     d = call(titles=title, prop="imageinfo|categories", iiprop="url|extmetadata|size", iiurlwidth=2400, cllimit="max")
     page = next(iter(d["query"]["pages"].values()))
     if "imageinfo" not in page:
-        sys.exit(f"找不到 {title}")
+        sys.exit(f"Not found: {title}")
     i, m = info(page)
-    # 翻拍/扫描常有双重授权（原作公有领域 + 照片 CC BY-SA），licenseShortName 只报一个，所以再看分类
+    # Scans often carry two licenses (public-domain work + CC BY-SA photo); LicenseShortName reports one, so check categories too.
     lic = [c["title"][9:] for c in page.get("categories", []) if re.match(r"Category:(CC|PD|GFDL|Public domain)", c["title"])]
-    bylic = m.get("AttributionRequired") == "true" or any(re.match(r"CC-BY", c) for c in lic)
+    credit = m.get("AttributionRequired") == "true" or any(c.startswith("CC-BY") for c in lic)
     dest = Path(dest)
     req = urllib.request.Request(i.get("thumburl") or i["url"], headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=120) as r:
         dest.write_bytes(r.read())
-    need = "需要署名" if bylic else "无需署名"
+    need = "credit required" if credit else "no credit required"
+    author = m.get("Artist", "unknown")
     dest.with_suffix(".md").write_text(f"""# {dest.name}
 
-- 来源：Wikimedia Commons，{i['descriptionurl']}
-- 标题：{page['title']}
-- 描述：{m.get('ImageDescription', '')[:120]}
-- 作者：{m.get('Artist', '未知')}
-- 授权：{m.get('LicenseShortName', '未知')}（{need}）{m.get('LicenseUrl', '')}
-- 授权分类：{', '.join(lic) or '无'}（多个时按最严格的执行；发布前打开来源页确认）
-- 署名写法：{m.get('Artist', '未知')} / {', '.join(c for c in lic if c.startswith('CC-BY')) or m.get('LicenseShortName', '')} / Wikimedia Commons
-- 下载日期：{datetime.date.today()}
-- 原图尺寸：{i['width']}×{i['height']}
+- Source: Wikimedia Commons, {i['descriptionurl']}
+- Title: {page['title']}
+- Description: {m.get('ImageDescription', '')[:120]}
+- Author: {author}
+- License: {m.get('LicenseShortName', 'unknown')} ({need}) {m.get('LicenseUrl', '')}
+- License categories: {', '.join(lic) or 'none'} (if several, follow the strictest; confirm on the source page before publishing)
+- Credit line: {author} / {', '.join(c for c in lic if c.startswith('CC-BY')) or m.get('LicenseShortName', '')} / Wikimedia Commons
+- Retrieved: {datetime.date.today()}
+- Original size: {i['width']}x{i['height']}
 """, encoding="utf-8")
-    print(f"{dest}  [{m.get('LicenseShortName', '?')}，{need}]")
+    print(f"{dest}  [{m.get('LicenseShortName', '?')}, {need}]")
 
 
 if __name__ == "__main__":

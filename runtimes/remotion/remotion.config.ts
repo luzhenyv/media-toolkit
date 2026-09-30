@@ -1,9 +1,9 @@
-// 让内容仓库里的素材 .tsx 能 import 本目录 node_modules 里的 remotion / react。
+// Lets asset .tsx files in content repos import remotion / react from this directory's node_modules.
 import path from "path";
 import { Config } from "@remotion/cli/config";
 
 const asset = process.env.ASSET;
-if (!asset) throw new Error("需要环境变量 ASSET=素材 .tsx 的绝对路径（用 bin/render 或 bin/preview 调用）");
+if (!asset) throw new Error("ASSET must be the absolute path of an asset .tsx (run via bin/render or bin/preview)");
 
 Config.overrideWebpackConfig((c) => ({
   ...c,

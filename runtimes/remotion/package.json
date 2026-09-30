@@ -1,7 +1,7 @@
 {
   "name": "media-toolkit-remotion",
   "private": true,
-  "description": "共享的 Remotion 运行环境。素材 .tsx 放在内容仓库里，由 bin/render 通过 ASSET 环境变量指定。",
+  "description": "Shared Remotion runtime. Asset .tsx files live in content repos; bin/render passes one via the ASSET env var.",
   "dependencies": {
     "@remotion/cli": "4.0.530",
     "react": "19.3.0",

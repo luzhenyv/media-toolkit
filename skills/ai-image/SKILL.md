@@ -1,50 +1,50 @@
 ---
 name: ai-image
-description: 为 AI 插画写 prompt、管理生成的候选图和最终选用的版本。用户在 ChatGPT、Midjourney 等工具里生成图片，本 Skill 不调用生图 API。配图清单里形式为"插画""漫画"时使用。
+description: Write prompts for AI illustrations and manage generated candidates and the chosen version. The user generates images in ChatGPT, Midjourney, etc.; this skill calls no image API. Use for markers of type illustration.
 ---
 
-# AI 插画
+# AI illustration
 
-文件放在哪、怎么命名，按 `asset-layout` Skill。
+File names and markers follow `media-sop`.
 
-AI 图没有能重新导出的源文件，**prompt 就是源文件**：写在和图片同名的 `.md` 里。
+An AI image has no renderable source, so **the prompt is the source**, kept in a same-name `.md`:
 
 ```text
 assets/
-├── F13-本质主义.md       # prompt + 选用记录（源文件）
-├── F13-本质主义.v1.png   # 用户生成的候选
-├── F13-本质主义.v2.png
-└── F13-本质主义.png      # 选用的那张（从某个 v# 复制）
+├── F13-chinese-room.md      # prompt + log (source)
+├── F13-chinese-room.v1.png  # candidates the user generated
+├── F13-chinese-room.v2.png
+└── F13-chinese-room.png     # the chosen one (copied from a v#)
 ```
 
-## 步骤
+## Steps
 
-1. 读稿子里对应的配图说明。找同一系列里已有插画的 `.md`，沿用它的"风格"段，保证整个系列画风一致。
-2. 写 `F##-短名.md`，格式：
+1. Read the marker and surrounding text. Take the illustration style from `style.md`; if another illustration in the project already has a `.md`, reuse its Style section so the series stays consistent.
+2. Write `F##-<name>.md`:
 
    ```markdown
-   # F13-本质主义
+   # F13-chinese-room
 
-   ## 画面
-   一句话中文描述：要表达什么。
+   ## Scene
+   What the image must convey, in the project's language.
 
-   ## 风格
-   扁平插画，暖色，线条简洁，无文字（文字后期加）……
+   ## Style
+   (from style.md)
 
    ## Prompt
-   （英文，可直接粘贴。画幅写进 prompt，如 16:9。）
+   (English, ready to paste; include the aspect ratio, e.g. 16:9)
 
-   ## 记录
-   - v1：ChatGPT，2026-10-01。门缝太小。
-   - 选用：v2
+   ## Log
+   - v1: ChatGPT, 2026-10-01. Door slot too small.
+   - Chosen: v2
    ```
 
-3. 告诉用户：把 Prompt 粘贴到生图工具；结果按 `F##-短名.v1.png`、`v2`…… 存进 `assets/`。
-4. 用户放入候选后，用 Read 查看，对照"画面"给出取舍或修改 prompt 的建议，把结论写进"记录"。
-5. 选定后复制为 `F##-短名.png`，在"记录"里写"选用：v#"。
+3. Tell the user: paste the Prompt into their image tool and save results as `F##-<name>.v1.png`, `v2`, … in `assets/`.
+4. When candidates arrive, Read them, compare against Scene, suggest a pick or a prompt change, and log the conclusion.
+5. Once chosen, copy it to `F##-<name>.png`, log `Chosen: v#`, set the marker to `draft`, and add the embed line.
 
-## Prompt 要点
+## Prompt rules
 
-- 图里不要出现文字：AI 画中文字容易错，文字用 `drawio-diagram` 或剪映后期加。
-- 画幅写明：视频 16:9，小红书 3:4。
-- 只描述画面，不写抽象概念（写"门缝里塞进一张纸条"，不写"中文屋思想实验"）。
+- No text in the image: AI renders CJK text badly. Add text later in draw.io or CapCut.
+- State the aspect ratio: video 16:9, Xiaohongshu 3:4 (or as `style.md` says).
+- Describe what is visible, not the abstract idea ("a note slid under a door", not "the Chinese Room argument").

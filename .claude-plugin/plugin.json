@@ -1,6 +1,6 @@
 {
   "name": "media-toolkit",
-  "version": "0.1.0",
-  "description": "自媒体素材工具箱：设计配图、制作可手改源文件的示意图和动画",
+  "version": "0.2.0",
+  "description": "Content production toolkit: plan visuals, make hand-editable diagrams, animations, and images, and plan voiceover and video edits",
   "author": { "name": "Steven Lu" }
 }

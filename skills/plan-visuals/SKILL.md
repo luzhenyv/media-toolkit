@@ -1,23 +1,24 @@
 ---
 name: plan-visuals
-description: 读口播稿或文章，设计配图方案，产出或更新 配图.md 清单，不直接制作素材。用户说"设计配图""这集需要哪些图""配图方案"时使用。
+description: Read an article or script and plan its visuals by inserting or updating visual markers in place. Plans only; does not produce assets. Use when the user asks to plan visuals, design illustrations, or asks which images a piece needs.
 ---
 
-# 设计配图
+# Plan visuals
 
-只出清单，不做素材。用户确认后，再按清单逐个调用对应的制作 Skill。
+Marker format and file names follow `media-sop`. Read the project `CLAUDE.md` and `style.md` first.
 
-## 步骤
+## Steps
 
-1. 读稿子；如果已有 `配图.md`，先读它，保留用户已确认的条目（状态为草稿、定稿的不动）。
-2. 找出需要画面的位置，每处想清楚：观众此刻需要看到什么，才更容易听懂？
-3. 按 `asset-layout` 的格式写入 `配图.md`，新条目状态为 `待制`。
-4. 如果稿子里还没有 `【配图 F##】` 标记，列出建议的插入位置给用户，不要自己改稿。
+1. Find what changed. If a commit message contains `final` for this unit, read `git diff <that commit> -- <article>` and plan only the changed parts. Otherwise plan the whole article.
+2. For each place that needs a visual, ask: what does the reader or viewer need to see here to understand it faster?
+3. Insert a marker line after the paragraph it belongs to: `> [F## · type · todo] description`. New IDs continue from the highest existing ID in the unit.
+4. Existing markers: keep `draft` and `final` ones as they are. If the text around a marker changed, update its description and tell the user. If a visual is no longer needed, set it to `dropped`.
+5. Reply with a short table: ID, type, one-line description, suggested skill.
 
-## 判断
+## Judgment
 
-- 宁少勿多：一个概念一张图；纯口语过渡处不配。
-- 形式选最省事、够用的：静态能讲清就不做动画，示意图能讲清就不用 AI 插画。
-- 形式对应的制作 Skill：示意图、表格 → `drawio-diagram`；动画 → `remotion-animation`；实物、照片 → `image-search`；插画、漫画 → `ai-image`。其他形式（屏幕录制等）暂无 Skill，标注出来即可。
-- 能找到真实的历史图片（人物、书页、手稿）时，优先用真实图片，不用 AI 画。
-- 画面描述写到能直接动手的程度：有哪些元素、数字是多少、从哪里变到哪里。
+- Fewer is better: one visual per idea; none for spoken transitions.
+- Pick the simplest form that works: static before animation, diagram before AI illustration, real historical images (people, pages, manuscripts) before AI.
+- Type → skill: `diagram` → `drawio-diagram`; `animation` → `remotion-animation`; `photo` → `image-search`; `illustration` → `ai-image`; `screen` → the user records it.
+- Write descriptions concrete enough to build from: elements, numbers, what changes into what.
+- Never change prose. Only marker lines.

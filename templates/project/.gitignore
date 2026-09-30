@@ -1,0 +1,6 @@
+.DS_Store
+# Raw recordings are large; back them up outside git.
+**/raw/*.mov
+**/raw/*.mp4
+**/raw/*.m4a
+**/raw/*.wav

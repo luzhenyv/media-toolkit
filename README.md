@@ -1,49 +1,62 @@
 # media-toolkit
 
-Claude Code plugin：设计配图，制作**可以手改源文件**的素材。改细节时直接改源文件，再 `render` 一次，不用回头找 AI。
+A Claude Code plugin for content projects: one SOP, a small set of tools, and skills for the article → voiceover → video workflow. Every asset has a **hand-editable source**; fix details yourself and re-render, without going back to the agent.
 
-| 目录 | 内容 |
+## Workflow
+
+In a content project, open `claude` and say what you want:
+
+| You say | You get |
 |---|---|
-| `skills/` | `plan-visuals` 设计配图清单；`asset-layout` 文件结构规矩；`drawio-diagram` 示意图；`remotion-animation` 动画；`image-search` 搜图；`ai-image` AI 插画 |
-| `bin/` | `render`：源文件 → 成品；`preview`：动画实时预览；`commons`：Wikimedia Commons 搜图下载 |
-| `runtimes/remotion/` | 共享的 Remotion 环境，`node_modules` 装在这里（不进 git） |
+| (edit the article yourself) | |
+| "plan visuals" | visual markers in the article |
+| "make F03 F04" | assets + image embeds; review them in Typora |
+| commit `EP01: article final` | checkpoint |
+| "voiceover script" | `voiceover.md` |
+| record in CapCut, export subtitles to `voiceover.srt` | |
+| "edit plan" | `edit.md`: timecode × visual; missing visuals get planned |
+| edit in CapCut | |
 
-## 使用
+Rules (project layout, file names, markers) live in one place: `skills/media-sop`.
 
-整台电脑只有这一份代码，不安装、不复制，用 `--plugin-dir` 直接加载。在 `~/.zshrc` 里加：
+## Contents
+
+| Path | What |
+|---|---|
+| `skills/` | `media-sop` rules · `plan-visuals` · `drawio-diagram` · `remotion-animation` · `image-search` · `ai-image` · `voiceover-script` · `edit-plan` |
+| `bin/` | `render` source → output · `preview` live animation preview · `commons` Wikimedia Commons search/download |
+| `runtimes/remotion/` | shared Remotion runtime; `node_modules` installs here (not in git) |
+| `templates/project/` | `CLAUDE.md`, `style.md`, `.gitignore` for a new project |
+
+## Setup
+
+One copy per machine, loaded in place with `--plugin-dir` (no install, no cache copy). In `~/.zshrc`:
 
 ```sh
 alias claude='claude --plugin-dir ~/Steven/project/media-toolkit'
-export PATH="$HOME/Steven/project/media-toolkit/bin:$PATH"   # 手动 render / preview 用
+export PATH="$HOME/Steven/project/media-toolkit/bin:$PATH"   # for render / preview / commons by hand
 ```
 
-然后在内容仓库里启动 `claude`，例如："给 EP01 设计配图"、"做 F03"。
+- Editing `bin/` scripts: takes effect immediately.
+- Editing `SKILL.md`: takes effect in a new session.
 
-- 改 `bin/` 脚本：立即生效。
-- 改 `SKILL.md`：新开一个会话生效。
+Requires draw.io desktop (`/Applications/draw.io.app`), Node.js (animations; the first `render` runs `npm install`; commit the resulting `package-lock.json`), and Python 3.
 
-需要：draw.io 桌面版（`/Applications/draw.io.app`）；Node.js（动画用，第一次 `render` 会自动 `npm install`，生成的 `package-lock.json` 要提交，用来锁定依赖版本）。
+New project: "set up this project with media-toolkit" (copies `templates/project/`).
 
-## 手动调整和重新导出
-
-```sh
-render assets/F03-转移表.drawio     # → F03-转移表.png
-render assets/F04-转移图小球.tsx     # → F04-转移图小球.mp4 + .png（封面）
-preview assets/F04-转移图小球.tsx    # 浏览器实时预览，改 .tsx 保存后自动刷新
-```
-
-| 源文件 | 成品 | 怎么手改 | Skill |
-|---|---|---|---|
-| `.drawio` | `.png` | draw.io 打开 | `drawio-diagram` |
-| `.tsx` | `.mp4` + `.png` | 改文件顶部"可调参数" | `remotion-animation` |
-| `.md`（来源） | 下载的 `.jpg` / `.png` | 不改原图，合成时另做 | `image-search` |
-| `.md`（prompt） | `.v1.png` … → `.png` | 改 prompt，自己去生图 | `ai-image` |
-
-## 搜图
+## By hand
 
 ```sh
+render                                 # re-export every stale asset in ./assets
+render assets/F04-ball.tsx             # one asset → .mp4 + .png cover
+preview assets/F04-ball.tsx            # live preview in the browser
 commons search "Andrei Markov" 5
-commons get "File:Andrei Markov.jpg" assets/F02-奥涅金计数.肖像.jpg   # 同时写 .md（来源、授权）
+commons get "File:Andrei Markov.jpg" assets/F02-onegin.portrait.jpg
 ```
 
-需要 Python 3（macOS 自带）。AI 生图暂不接 API：Agent 写 prompt，你在 ChatGPT 等工具里生成后存进 `assets/`。
+| Source | Output | Edit by hand | Skill |
+|---|---|---|---|
+| `.drawio` | `.png` | open in draw.io | `drawio-diagram` |
+| `.tsx` | `.mp4` + `.png` | the parameters block at the top | `remotion-animation` |
+| `.md` (source, license) | downloaded `.jpg` / `.png` | never edit originals; composite elsewhere | `image-search` |
+| `.md` (prompt) | `.v1.png` … → `.png` | edit the prompt, regenerate yourself | `ai-image` |

@@ -1,8 +1,8 @@
 #!/bin/sh
-# preview：在浏览器里打开 Remotion Studio 预览素材，改 .tsx 保存后画面自动刷新。
-# 用法：preview 素材.tsx
+# preview: open an asset in Remotion Studio; saving the .tsx refreshes the view.
+# Usage: preview <asset>.tsx
 set -e
-[ $# -eq 1 ] || { echo "用法: preview 素材.tsx" >&2; exit 1; }
+[ $# -eq 1 ] || { echo "usage: preview <asset>.tsx" >&2; exit 1; }
 abs="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 cd "$(dirname "$0")/../runtimes/remotion"
 [ -d node_modules ] || npm install --no-audit --no-fund

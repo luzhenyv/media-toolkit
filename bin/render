@@ -1,28 +1,40 @@
 #!/bin/sh
-# render：由源文件重新导出成品，成品和源文件同名，放在同一目录。
-#   F03-转移表.drawio  ->  F03-转移表.png
-#   F04-小球.tsx       ->  F04-小球.mp4 + F04-小球.png（封面）
-# 用法：render 源文件...
+# render: re-export outputs from sources. Output shares the source name, in the same directory.
+#   F03-table.drawio -> F03-table.png
+#   F04-ball.tsx     -> F04-ball.mp4 + F04-ball.png (cover)
+# Usage: render [source...]
+#   No arguments: re-export every source in ./assets (or .) whose output is missing or older.
 set -e
-[ $# -gt 0 ] || { echo "用法: render 源文件..." >&2; exit 1; }
 
 DRAWIO=/Applications/draw.io.app/Contents/MacOS/draw.io
-[ -x "$DRAWIO" ] || DRAWIO=drawio   # 非 macOS：用 PATH 里的 drawio
+[ -x "$DRAWIO" ] || DRAWIO=drawio   # non-macOS: drawio on PATH
 RT="$(cd "$(dirname "$0")/../runtimes/remotion" && pwd)"
 
-remotion() {   # remotion 命令 素材绝对路径 其余参数...
+remotion() {   # remotion <command> <absolute asset path> <args...>
   cmd=$1; asset=$2; shift 2
   (cd "$RT" && { [ -d node_modules ] || npm install --no-audit --no-fund; } \
     && ASSET="$asset" npx remotion "$cmd" index.tsx "$@")
 }
 
+out() { case "$1" in *.drawio) echo "${1%.drawio}.png" ;; *.tsx) echo "${1%.tsx}.mp4" ;; esac; }
+
+if [ $# -eq 0 ]; then
+  dir=.; [ -d assets ] && dir=assets
+  for s in "$dir"/*.drawio "$dir"/*.tsx; do
+    [ -e "$s" ] || continue
+    o=$(out "$s"); [ -e "$o" ] && [ ! "$s" -nt "$o" ] && continue
+    set -- "$@" "$s"
+  done
+  [ $# -gt 0 ] || { echo "render: everything is up to date"; exit 0; }
+fi
+
 for src in "$@"; do
   case "$src" in
-    *.drawio) "$DRAWIO" -x -f png -s 2 -o "${src%.drawio}.png" "$src" ;;
+    *.drawio) "$DRAWIO" -x -f png -s 2 -o "$(out "$src")" "$src" ;;
     *.tsx)
       abs="$(cd "$(dirname "$src")" && pwd)/$(basename "$src")"
       remotion render "$abs" main "${abs%.tsx}.mp4"
       remotion still "$abs" cover "${abs%.tsx}.png" ;;
-    *) echo "render: 暂不支持 $src" >&2; exit 1 ;;
+    *) echo "render: unsupported file $src" >&2; exit 1 ;;
   esac
 done
