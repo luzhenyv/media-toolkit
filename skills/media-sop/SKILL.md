@@ -35,6 +35,7 @@ description: The single source of rules for content projects - project template,
 - Source and output share a name; only the extension differs. Outputs can always be re-rendered from the source.
 - Assets without a renderable source (downloaded, AI-generated) get a same-name `.md` recording source, license, or prompt.
 - Suffixes for multiple files under one ID: `.portrait` / `.page` (several originals), `.v1` / `.v2` (AI candidates), `.9x16` (other aspect ratios).
+- Short names and suffixes are English, lowercase, hyphenated (`F03-transition-table.png`), unless the project's `CLAUDE.md` says otherwise. Non-ASCII file names often break tools.
 - No spaces, no `final_v3`. History lives in git.
 - Dropped assets move to `assets/_dropped/`.
 - Reuse across units by relative path (`../EP01-xxx/assets/F04-xxx.mp4`); do not copy.

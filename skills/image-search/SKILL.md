@@ -10,7 +10,7 @@ File names and markers follow `media-sop`. Wikimedia Commons only: its licensing
 ## Steps
 
 1. Search: `"${CLAUDE_PLUGIN_ROOT}/bin/commons" search "<query>" [count]`
-   - Query in English or the original language (Russian, Latin, …); Chinese queries return little.
+   - Query in English or the subject's original language (Russian, Latin, …).
    - Same-name people are common (Andrei Markov is also a hockey player). Check author, date, and description.
 2. Offer 1–3 candidates: title, size, license, why it fits. Download after the user picks.
 3. Download: `"${CLAUDE_PLUGIN_ROOT}/bin/commons" get "File:<title>" assets/F##-<name>.jpg`
