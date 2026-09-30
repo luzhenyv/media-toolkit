@@ -27,4 +27,7 @@ If there is no `.srt`, ask the user to export one from their video editor or run
 
    How: `full screen`, `picture-in-picture`, `overlay`, `split screen`. Only content visuals; subtitles, captions, transitions, and music are added by the user in their video editor.
 3. Where the video needs a visual the article does not have (long talking-head stretch, a term that needs showing), add a marker to `video-edit.md` right under its table row: `> [F## · type · todo] description`, with the next free ID.
-4. Summarize: visuals ready, visuals still `todo`, and anything in the recording that differs from the script in facts or numbers.
+4. Report to the user:
+   - visuals ready (asset files exist);
+   - visuals still `todo`, including new ones added in step 3;
+   - facts or numbers in the recording that differ from the script (e.g. a misspoken percentage). Ignore wording changes.
