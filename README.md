@@ -30,15 +30,14 @@ Rules (project layout, file names, markers) live in one place: `skills/media-sop
 | `runtimes/remotion/` | shared Remotion runtime; `node_modules` installs here (not in git) |
 | `templates/project/` | `CLAUDE.md`, `style.md`, `.gitignore` for a new project |
 | `styles/` | visual style presets (`punch-card`, `blueprint`, `ink-and-seal`, `signal-and-noise`, `warm-flat`); open `preview.html` to compare |
-| `docs/profile.md` | the owner's personal brand profile |
 
 ## Setup
 
 One copy per machine, loaded in place with `--plugin-dir` (no install, no cache copy). In `~/.zshrc`:
 
 ```sh
-alias claude='claude --plugin-dir ~/Steven/project/media-toolkit'
-export PATH="$HOME/Steven/project/media-toolkit/bin:$PATH"   # for render / preview / commons by hand
+alias claude='claude --plugin-dir /path/to/media-toolkit'
+export PATH="/path/to/media-toolkit/bin:$PATH"   # for render / preview / commons by hand
 ```
 
 - Editing `bin/` scripts: takes effect immediately.
